@@ -1,0 +1,201 @@
+[
+    {
+        "url": "http://example-education.com",
+        "description": "Educational resources for students",
+        "tags": ["education", "resources", "students"],
+        "category": "Education"
+    },
+    {
+        "url": "http://math-portal.com",
+        "description": "Math tutorials and resourcesMath tutorials and resourcesMath tutorials and resourcesMath tutorials and resources",
+        "tags": ["math", "algebra", "tutorials"],
+        "category": "Education"
+    },
+    {
+        "url": "http://science-hubscience-hubscience-hubscience-hubscience-hubscience-hubscience-hub.com",
+        "description": "Latest updates in science",
+        "tags": ["science", "research", "updates", "maluco" ],
+        "category": "Science"
+    },
+    {
+        "url": "http://techworld.com",
+        "description": "Technology news and updates",
+        "tags": ["technology", "news", "innovation"],
+        "category": "Technology"
+    },
+    {
+        "url": "http://biology-basics.com",
+        "description": "Biology for beginners",
+        "tags": ["biology", "education", "basics"],
+        "category": "Science"
+    },
+    {
+        "url": "http://programming-guide.com",
+        "description": "Programming tutorials and courses",
+        "tags": ["programming", "tutorials", "coding"],
+        "category": "Technology"
+    },
+    {
+        "url": "http://art-history.com",
+        "description": "Art history and famous paintings",
+        "tags": ["art", "history", "paintings"],
+        "category": "Arts"
+    },
+    {
+        "url": "http://algebra-basics.com",
+        "description": "Basic concepts of algebra",
+        "tags": ["math", "education", "algebra"],
+        "category": "Education"
+    },
+    {
+        "url": "http://algebra-basics.com",
+        "description": "Basic concepts of algebra",
+        "tags": ["math", "education", "algebra"],
+        "category": "Education"
+    },
+    {
+        "url": "http://algebra-basics.com",
+        "description": "Basic concepts of algebra",
+        "tags": ["math", "education", "algebra"],
+        "category": "Education"
+    },
+    {
+        "url": "http://algebra-basics.com",
+        "description": "Basic concepts of algebra",
+        "tags": ["math", "education", "algebra"],
+        "category": "Education"
+    },
+    {
+        "url": "http://algebra-basics.com",
+        "description": "Basic concepts of algebra",
+        "tags": ["math", "education", "algebra"],
+        "category": "Education"
+    },
+    {
+        "url": "http://algebra-basics.com",
+        "description": "Basic concepts of algebra",
+        "tags": ["math", "education", "algebra"],
+        "category": "Education"
+    },
+    {
+        "url": "http://algebra-basics.com",
+        "description": "Basic concepts of algebra",
+        "tags": ["math", "education", "algebra"],
+        "category": "Education"
+    },
+    {
+        "url": "http://algebra-basics.com",
+        "description": "Basic concepts of algebra",
+        "tags": ["math", "education", "algebra"],
+        "category": "Education"
+    },
+    {
+        "url": "http://algebra-basics.com",
+        "description": "Basic concepts of algebra",
+        "tags": ["math", "education", "algebra"],
+        "category": "Education"
+    },
+    {
+        "url": "http://algebra-basics.com",
+        "description": "Basic concepts of algebra",
+        "tags": ["math", "education", "algebra"],
+        "category": "Education"
+    },
+    {
+        "url": "http://algebra-basics.com",
+        "description": "Basic concepts of algebra",
+        "tags": ["math", "education", "algebra"],
+        "category": "Education"
+    },
+    {
+        "url": "http://algebra-basics.com",
+        "description": "Basic concepts of algebra",
+        "tags": ["math", "education", "algebra"],
+        "category": "Education"
+    },
+    {
+        "url": "http://algebra-basics.com",
+        "description": "Basic concepts of algebra",
+        "tags": ["math", "education", "algebra"],
+        "category": "Education"
+    },
+    {
+        "url": "http://algebra-basics.com",
+        "description": "Basic concepts of algebra",
+        "tags": ["math", "education", "algebra"],
+        "category": "Education"
+    },
+    {
+        "url": "http://algebra-basics.com",
+        "description": "Basic concepts of algebra",
+        "tags": ["math", "education", "algebra"],
+        "category": "Education"
+    },
+    {
+        "url": "http://algebra-basics.com",
+        "description": "Basic concepts of algebra",
+        "tags": ["math", "education", "algebra"],
+        "category": "Education"
+    },
+    {
+        "url": "http://algebra-basics.com",
+        "description": "Basic concepts of algebra",
+        "tags": ["math", "education", "algebra"],
+        "category": "Education"
+    },
+    {
+        "url": "http://algebra-basics.com",
+        "description": "Basic concepts of algebra",
+        "tags": ["math", "education", "algebra"],
+        "category": "Education"
+    },
+    {
+        "url": "http://science-news.com",
+        "description": "Latest discoveries in science",
+        "tags": ["science", "discovery", "research"],
+        "category": "Science"
+    },
+    {
+        "url": "http://history-world.com",
+        "description": "World history and ancient civilizations",
+        "tags": ["history", "civilizations", "education"],
+        "category": "History"
+    },
+    {
+        "url": "http://programming-beginners.com",
+        "description": "Introductory programming for beginners",
+        "tags": ["programming", "coding", "beginners"],
+        "category": "Technology"
+    },
+    {
+        "url": "http://music-theory.com",
+        "description": "Music theory and composition",
+        "tags": ["music", "theory", "composition"],
+        "category": "Music"
+    },
+    {
+        "url": "http://advanced-algebra.com",
+        "description": "Advanced algebra tutorials",
+        "tags": ["algebra", "advanced", "math"],
+        "category": "Education"
+    },
+    {
+        "url": "http://chemistry-101.com",
+        "description": "Basic chemistry concepts",
+        "tags": ["chemistry", "science", "basics"],
+        "category": "Science"
+    },
+    {
+        "url": "http://history-artifacts.com",
+        "description": "Artifacts and history discoveries",
+        "tags": ["history", "artifacts", "discoveries"],
+        "category": "History"
+    },
+    {
+        "url": "http://coding-challenges.com",
+        "description": "Coding challenges for all levels",
+        "tags": ["coding", "programming", "challenges"],
+        "category": "Technology"
+    }
+]
+
