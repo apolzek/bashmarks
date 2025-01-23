@@ -1,9 +1,10 @@
 import json
 import os
 import re
+import requests
+import yaml
 from rich.console import Console
 from rich.table import Table
-from rich.prompt import Prompt
 
 # Função para ler o arquivo JSON
 def load_data_from_file(file_path):
@@ -13,14 +14,25 @@ def load_data_from_file(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         return json.load(file)
 
+# Função para baixar o arquivo da URL
+def download_json_from_url(url, download_dir=".repositories"):
+    if not os.path.exists(download_dir):
+        os.makedirs(download_dir)
+    
+    response = requests.get(url)
+    response.raise_for_status()  # Levanta um erro se a requisição falhar
+    
+    file_name = os.path.join(download_dir, os.path.basename(url))
+    with open(file_name, 'w', encoding='utf-8') as file:
+        json.dump(response.json(), file, ensure_ascii=False, indent=4)
+    
+    return file_name
+
 # Função para filtrar dados por qualquer campo (incluindo a URL, tag, description, category)
 def filter_data(data, keyword=None):
     filtered = data
-
-    # Se houver uma palavra-chave (keyword), fazemos uma busca geral por substrings em todos os campos
     if keyword:
         filtered = [entry for entry in filtered if any(keyword.lower() in str(entry[field]).lower() for field in entry)]
-
     return filtered
 
 # Função para truncar a descrição se for maior que 20 caracteres
@@ -81,29 +93,58 @@ def parse_query(query):
     for field, value in matches:
         filters[field] = value
 
-    # Palavra solta (fora dos filtros específicos)
     remaining_query = query
     for field, value in matches:
         remaining_query = remaining_query.replace(f'{field}="{value}"', "").strip()
 
     return filters, remaining_query
 
+# Função para carregar os dados do YAML
+def load_yaml_config(yaml_path):
+    with open(yaml_path, 'r', encoding='utf-8') as file:
+        return yaml.safe_load(file)
+
+# Função para salvar os dados no arquivo YAML
+def save_yaml_config(yaml_path, config):
+    with open(yaml_path, 'w', encoding='utf-8') as file:
+        yaml.dump(config, file)
+
 # Função principal
-def main(file_path):
-    try:
-        # Carregar dados do arquivo
-        data = load_data_from_file(file_path)
-    except FileNotFoundError as e:
-        print(e)
+def main():
+    yaml_path = os.path.join(os.getcwd(), 'config.yaml')
+    
+    if not os.path.exists(yaml_path):
+        print(f"O arquivo de configuração {yaml_path} não foi encontrado.")
         return
+
+    # Carregar configuração do YAML
+    config = load_yaml_config(yaml_path)
+    
+    all_data = []
+
+    # Processar os arquivos locais
+    for file_path in config.get('local_files', []):
+        try:
+            data = load_data_from_file(file_path)
+            all_data.extend(data)
+        except FileNotFoundError as e:
+            print(e)
+
+    # Processar as URLs
+    for url in config.get('urls', []):
+        try:
+            file_path = download_json_from_url(url)
+            data = load_data_from_file(file_path)
+            all_data.extend(data)
+        except Exception as e:
+            print(f"Erro ao processar a URL {url}: {e}")
 
     console = Console()
     current_page = 1
-    per_page = 5
-    filtered_data = data
+    per_page = 10
+    filtered_data = all_data
     total_pages = (len(filtered_data) + per_page - 1) // per_page  # Calcular total de páginas
 
-    # Exibindo todos os dados inicialmente
     if not filtered_data:
         console.print("No results found!", style="bold red")
         return
@@ -115,8 +156,7 @@ def main(file_path):
         # Exibindo navegação e opções de filtro
         console.print(f"\nPage {current_page}/{total_pages}", style="bold")
         
-        # Perguntar por filtros ou limpar filtros
-        user_input = Prompt.ask("Press 'n' for next, 'p' for previous, 'f' to filter, 'c' to clear filters, 's' to select a record, or 'q' to quit").lower()
+        user_input = input("Press 'n' for next, 'p' for previous, 'f' to filter, 'c' to clear filters, 's' to select a record, 'r' for repositories, or 'q' to quit: ").lower()
 
         if user_input == 'n' and current_page < total_pages:
             current_page += 1
@@ -125,36 +165,56 @@ def main(file_path):
         elif user_input == 'q':
             break
         elif user_input == 'f':
-            # Aplicar filtros dinâmicos
-            query = Prompt.ask("Enter your search query (e.g., 'algebra', 'description=\"math\"', 'tag=\"science\"')")
-            
-            # Se houver uma palavra chave solta (sem filtros), ela será aplicada a todos os campos
+            query = input("Enter your search query (e.g., 'algebra', 'description=\"math\"', 'tag=\"science\"'): ")
             filters, keyword = parse_query(query)
-            
-            # Se houver uma palavra-chave sem filtro, ela será aplicada a todos os campos (url, description, category, tags)
             if not filters and keyword:
-                filtered_data = filter_data(data, keyword)
+                filtered_data = filter_data(all_data, keyword)
             else:
-                # Filtrar dados com base nos filtros especificados
-                filtered_data = filter_data(data, keyword)
+                filtered_data = filter_data(all_data, keyword)
                 
             total_pages = (len(filtered_data) + per_page - 1) // per_page  # Recalcular total de páginas após o filtro
         elif user_input == 'c':
-            # Limpar filtros
-            filtered_data = data
+            filtered_data = all_data
             total_pages = (len(filtered_data) + per_page - 1) // per_page  # Recalcular total de páginas
         elif user_input == 's':
-            # Selecionar um registro específico para exibir detalhes completos
-            record_number = Prompt.ask("Enter the record number to view full details", default="1")
+            record_number = input("Enter the record number to view full details: ")
             try:
                 record_number = int(record_number)
                 display_full_record_in_table(filtered_data, record_number)
             except ValueError:
                 console.print("Invalid input. Please enter a valid number.", style="bold red")
+        elif user_input == 'r':
+            # Exibir repositórios
+            repositories = config.get('local_files', [])
+            console.print("Repositories:", style="bold")
+            if not repositories:
+                console.print("No repositories available.", style="bold red")
+            else:
+                for idx, repo in enumerate(repositories, start=1):
+                    console.print(f"{idx}. {repo}")
+            
+            # Adicionar ou remover repositórios
+            repo_action = input("Press 'a' to add a repository, 'd' to delete a repository, or 'q' to return: ").lower()
+            if repo_action == 'a':
+                new_repo = input("Enter the repository URL to add: ")
+                repositories.append(new_repo)
+                config['repositories'] = repositories
+                save_yaml_config(yaml_path, config)
+                console.print(f"Repository '{new_repo}' added.", style="bold green")
+            elif repo_action == 'd':
+                repo_number = input("Enter the number of the repository to remove: ")
+                try:
+                    repo_number = int(repo_number)
+                    removed_repo = repositories.pop(repo_number - 1)
+                    config['repositories'] = repositories
+                    save_yaml_config(yaml_path, config)
+                    console.print(f"Repository '{removed_repo}' removed.", style="bold red")
+                except (ValueError, IndexError):
+                    console.print("Invalid repository number.", style="bold red")
+            elif repo_action == 'q':
+                continue
         else:
-            console.print("Invalid input. Please press 'n', 'p', 'f', 'c', 's' or 'q'.", style="bold red")
+            console.print("Invalid input. Please press 'n', 'p', 'f', 'c', 's', 'r' or 'q'.", style="bold red")
 
 if __name__ == "__main__":
-    # Caminho do arquivo JSON será passado como parâmetro ao iniciar o script
-    file_path = Prompt.ask("Enter the path to the urls.json file")
-    main(file_path)
+    main()

@@ -1,0 +1,7 @@
+local_files:
+  - ".files/urls.json"
+  - ".files/private.json"
+
+# urls:
+#   - "https://exemplo.com/arquivo1.json"
+#   - "https://exemplo.com/arquivo2.json"
