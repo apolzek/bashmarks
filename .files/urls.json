@@ -202,6 +202,12 @@
         "description": "Apolzek blog",
         "tags": ["xpto"],
         "category": "IIS"
+    },
+    {
+        "url": "http://apolzek.com",
+        "description": "Apolzek blog",
+        "tags": ["rayray01"],
+        "category": "IIS"
     }
 ]
 
