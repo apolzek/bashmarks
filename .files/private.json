@@ -1,9 +1,21 @@
 [
     {
-        "url": "http://apolzek.com",
-        "description": "Apolzek blog",
-        "tags": ["blog"],
-        "category": "Education"
+        "url": "http://apolzek.io333",
+        "description": "Apolzek blog io 767",
+        "tags": ["bobsponja"],
+        "category": "WWE"
+    },
+    {
+        "url": "http://history-artifacts.com",
+        "description": "Artifacts and history discoveries",
+        "tags": ["uuu", "artifacts", "discoveries"],
+        "category": "LABY"
+    },
+    {
+        "url": "http://history-artifacts.com",
+        "description": "Artifacts and history discoveries",
+        "tags": ["uuu", "artifacts", "discoveries"],
+        "category": "LABY"
     }
 ]
 

@@ -196,6 +196,12 @@
         "description": "Coding challenges for all levels",
         "tags": ["coding", "programming", "challenges"],
         "category": "Technology"
+    },
+    {
+        "url": "http://apolzek.com",
+        "description": "Apolzek blog",
+        "tags": ["xpto"],
+        "category": "IIS"
     }
 ]
 
