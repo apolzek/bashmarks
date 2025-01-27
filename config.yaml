@@ -1,4 +1,0 @@
-local_files:
-  - .files/private.json
-  - .files/urls.json
-  - invalid_repo.json
