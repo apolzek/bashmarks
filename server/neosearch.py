@@ -1,10 +1,12 @@
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, BackgroundTasks, HTTPException, Query
 from typing import List, Optional
 import os
 import json
 import requests
+import hashlib
 import yaml
 from pydantic import BaseModel
+from time import time
 
 app = FastAPI()
 
@@ -17,6 +19,11 @@ class RepositoryAddRequest(BaseModel):
 
 class RepositoryDeleteRequest(BaseModel):
     path: str
+
+# Variáveis de controle de modificação
+last_config_check_time = time()
+config_file_mtime = os.path.getmtime(CONFIG_PATH)
+repo_hashes = {}
 
 def load_config():
     """
@@ -45,15 +52,59 @@ def validate_repository(repo: str):
             response = requests.get(repo)
             response.raise_for_status()
             data = response.json()
-            return True, "OK"
+            return True, data
         else:
             if not os.path.exists(repo):
                 return False, "File not found"
             with open(repo, 'r', encoding='utf-8') as file:
                 data = json.load(file)
-            return True, "OK"
+            return True, data
     except Exception as e:
         return False, f"Invalid format: {str(e)}"
+
+def get_repo_hash(data):
+    """
+    Gera o hash MD5 de um conteúdo para detectar alterações.
+    """
+    content = json.dumps(data, sort_keys=True).encode('utf-8')
+    return hashlib.md5(content).hexdigest()
+
+def check_config_changes():
+    """
+    Verifica se houve alteração no arquivo de configuração.
+    """
+    global config_file_mtime, last_config_check_time
+    current_mtime = os.path.getmtime(CONFIG_PATH)
+    if current_mtime != config_file_mtime:
+        config_file_mtime = current_mtime
+        last_config_check_time = time()
+        return True
+    return False
+
+def check_repo_changes(config):
+    """
+    Verifica se algum repositório teve alterações.
+    """
+    global repo_hashes
+    for repo in config.get("local_files", []):
+        is_valid, message = validate_repository(repo)
+        if is_valid:
+            repo_hash = get_repo_hash(message)
+            if repo not in repo_hashes:
+                repo_hashes[repo] = repo_hash
+            elif repo_hashes[repo] != repo_hash:
+                repo_hashes[repo] = repo_hash
+                return True
+    return False
+
+def background_task():
+    """
+    Tarefa em segundo plano para checar alterações de configuração e repositórios.
+    """
+    if check_config_changes():
+        print("Arquivo de configuração foi alterado.")
+    if check_repo_changes(load_config()):
+        print("Algum repositório teve alteração.")
 
 @app.post("/repositories/add")
 def add_repository(repo: RepositoryAddRequest):
@@ -129,3 +180,12 @@ def search(
         results.extend(filtered)
 
     return {"results": results}
+
+@app.on_event("startup")
+async def startup_event():
+    """
+    Executa tarefas em background assim que a aplicação é iniciada.
+    """
+    from fastapi import BackgroundTasks
+    background = BackgroundTasks()
+    background.add_task(background_task)

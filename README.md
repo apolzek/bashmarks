@@ -1,9 +1,12 @@
 # neosearch
 
-The favorite url search engine for people with bad memory :link:
+:mag_right: :link: The favorite url search engine for people with bad memory
+
+> Bookmarks are not an option
 
 ## cli mode
 
+run it locally 
 ```sh
 cd cli/
 python3 -m venv .venv
@@ -15,12 +18,13 @@ python3 neosearch.py
 
 ## server mode
 
+run it locally 
 ```sh
 pip install fastapi uvicorn
 uvicorn neosearch:app --reload
 ```
 
-### using curl to interact
+### how to interact with the API
 
 search using filters
 ```bash
@@ -61,14 +65,16 @@ find all
 curl -X GET "http://localhost:8000/search"
 ```
 
-## build
+## generate a binary 
 
 ```sh
 pip install pyinstaller
 pyinstaller --onefile --distpath ./dist --name neosearch main.py
 ```
 
+## generate a container image
 
-
-
+```sh
+docker build -t neosearch
+```
 
